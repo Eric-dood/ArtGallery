@@ -4,6 +4,11 @@
 using namespace std;
 //Global constants
 const int SIZE = 7;
+//Function prototypes
+vector<int> dfsRec(vector<vector<int>> &a, vector<bool> &visit, int s, vector<int> &r);
+vector<int> dfs(vector<vector<int>> &a);
+vector<int> bfs(vector<vector<int>> &a);
+
 //Define the Edge struct
 struct Edge
 {
@@ -61,6 +66,21 @@ int main()
 
     // Prints adjacency list representation of graph
     graph.printGraph();
-    
+
     return 0;
+}
+
+vector<int> dfsRec(vector<vector<int>> &a, vector<bool> &visit, int s, vector<int> &r)
+{
+
+}
+
+vector<int> dfs(vector<vector<int>> &a)
+{
+
+}
+
+vector<int> bfs(vector<vector<int>> &a)
+{
+    
 }

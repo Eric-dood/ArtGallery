@@ -1,6 +1,7 @@
 //COMSC-210 | Lab 34 | Eric-Giulio Hedes
 #include <iostream>
 #include <vector>
+#include <queue>
 using namespace std;
 //Global constants
 const int SIZE = 7;
@@ -59,7 +60,7 @@ void Graph::dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<i
     visit[s] = true;
     res.push_back(s);
     for (Pair &i : a[s]) {
-        if (!(visit[i.first]))
+        if (!visit[i.first])
             dfsRec(a, visit, i.first, res);
     }
 }
@@ -73,6 +74,42 @@ vector<int> Graph::dfs(vector<vector<Pair>> &a)
         if (!visit[i])
             dfsRec(a, visit, i, res);
     }
+    return res;
+}
+
+//define bfs()
+vector<int> Graph::bfs(vector<vector<Pair>> &a)
+{
+    int size = a.size();
+    vector<bool> visit(a.size(), false);
+    vector<int> res;
+    queue<int> q;
+
+    //Loop through vertices
+    for (int i = 0; i < size; i++)
+    {
+        if (!visit[i])
+            visit[i] = true;
+        q.push(i);
+        //Check if the queue is not empty
+        while (!q.empty())
+        {
+            int cur = q.front();
+            q.pop();
+            res.push_back(cur);
+            //Visit all vertices
+            for (Pair n : a[cur])
+            {
+                int fir = n.first;
+                if (!visit[fir])
+                {
+                    visit[fir] = true;
+                    q.push(fir);
+                }
+            }
+        }
+    }
+
     return res;
 }
 
@@ -97,6 +134,9 @@ int main()
     for (int i : dfsRes) cout << i << " ";
 
     //Print BFS results
+    vector<int> bfsRes = graph.bfs(graph.adjList);
+    cout << endl << "BFS starting from vertex 0:" << endl;
+    for (int j : bfsRes) cout << j << " ";
 
     return 0;
 }

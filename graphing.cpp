@@ -47,15 +47,33 @@ class Graph
             }
         }
         //Set up functions for DFS and BFS
-        vector<int> dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &r);
+        void dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &r);
         vector<int> dfs(vector<vector<Pair>> &a);
         vector<int> bfs(vector<vector<Pair>> &a);
 };
 
 //Now here's the functions for the DFS and BFS
-vector<int> dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &r)
+//Define dfsRec()
+void Graph::dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &res)
 {
     visit[s] = true;
+    res.push_back(s);
+    for (Pair &i : a[s]) {
+        if (!(visit[i.first]))
+            dfsRec(a, visit, i.first, res);
+    }
+}
+
+//define dfs()
+vector<int> Graph::dfs(vector<vector<Pair>> &a)
+{
+    vector<bool> visit(a.size(), false);
+    vector<int> res;
+    for (int i = 0; i < a.size(); i++) {
+        if (!visit[i])
+            dfsRec(a, visit, i, res);
+    }
+    return res;
 }
 
 //Start of main()
@@ -72,6 +90,13 @@ int main()
 
     // Prints adjacency list representation of graph
     graph.printGraph();
+
+    //Print DFS results
+    vector<int> dfsRes = graph.dfs(graph.adjList);
+    cout << endl << "DFS starting from vertex 0:" << endl;
+    for (int i : dfsRes) cout << i << " ";
+
+    //Print BFS results
 
     return 0;
 }

@@ -89,8 +89,10 @@ vector<int> Graph::bfs(vector<vector<Pair>> &a)
     for (int i = 0; i < size; i++)
     {
         if (!visit[i])
+        {
             visit[i] = true;
-        q.push(i);
+            q.push(i);
+        }
         //Check if the queue is not empty
         while (!q.empty())
         {

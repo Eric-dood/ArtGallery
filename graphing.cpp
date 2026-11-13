@@ -4,11 +4,6 @@
 using namespace std;
 //Global constants
 const int SIZE = 7;
-//Function prototypes
-vector<int> dfsRec(vector<vector<int>> &a, vector<bool> &visit, int s, vector<int> &r);
-vector<int> dfs(vector<vector<int>> &a);
-vector<int> bfs(vector<vector<int>> &a);
-
 //Define the Edge struct
 struct Edge
 {
@@ -20,39 +15,50 @@ typedef pair<int, int> Pair;
 class Graph
 {
     public:
-    // a vector of vectors of Pairs to represent an adjacency list
-    vector<vector<Pair>> adjList;
-    // Graph Constructor
-    Graph(vector<Edge> const &edges)
-    {
-        // resize the vector to hold SIZE elements of type vector<Edge>
-        adjList.resize(SIZE);
-        // add edges to the directed graph
-        for (auto &edge: edges)
+        // a vector of vectors of Pairs to represent an adjacency list
+        vector<vector<Pair>> adjList;
+        // Graph Constructor
+        Graph(vector<Edge> const &edges)
         {
-            int src = edge.src;
-            int dest = edge.dest;
-            int weight = edge.weight;
-            // insert at the end
-            adjList[src].push_back(make_pair(dest, weight));
-            // for an undirected graph, add an edge from dest to src also
-            adjList[dest].push_back(make_pair(src, weight));
+            // resize the vector to hold SIZE elements of type vector<Edge>
+            adjList.resize(SIZE);
+            // add edges to the directed graph
+            for (auto &edge: edges)
+            {
+                int src = edge.src;
+                int dest = edge.dest;
+                int weight = edge.weight;
+                // insert at the end
+                adjList[src].push_back(make_pair(dest, weight));
+                // for an undirected graph, add an edge from dest to src also
+                adjList[dest].push_back(make_pair(src, weight));
+            }
         }
-    }
-    // Print the graph's adjacency list
-    void printGraph()
-    {
-        cout << "Graph's adjacency list:" << endl;
-        for (int i = 0; i < adjList.size(); i++)
+        // Print the graph's adjacency list
+        void printGraph()
         {
-            cout << i << " --> ";
-            for (Pair v : adjList[i])
-            cout << "(" << v.first << ", " << v.second << ") ";
-            cout << endl;
+            cout << "Graph's adjacency list:" << endl;
+            for (int i = 0; i < adjList.size(); i++)
+            {
+                cout << i << " --> ";
+                for (Pair v : adjList[i])
+                cout << "(" << v.first << ", " << v.second << ") ";
+                cout << endl;
+            }
         }
-    }
+        //Set up functions for DFS and BFS
+        vector<int> dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &r);
+        vector<int> dfs(vector<vector<Pair>> &a);
+        vector<int> bfs(vector<vector<Pair>> &a);
 };
 
+//Now here's the functions for the DFS and BFS
+vector<int> dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &r)
+{
+    visit[s] = true;
+}
+
+//Start of main()
 int main()
 {
     // Creates a vector of graph edges/weights
@@ -68,19 +74,4 @@ int main()
     graph.printGraph();
 
     return 0;
-}
-
-vector<int> dfsRec(vector<vector<int>> &a, vector<bool> &visit, int s, vector<int> &r)
-{
-
-}
-
-vector<int> dfs(vector<vector<int>> &a)
-{
-
-}
-
-vector<int> bfs(vector<vector<int>> &a)
-{
-    
 }

@@ -70,7 +70,7 @@ class Graph
         }
         //Set up functions for DFS and BFS
         void dfsRec(vector<bool> &visit, int s, vector<int> &r);
-        vector<int> dfs(int start);
+        void dfs(int start);
         vector<int> bfs(int start);
 };
 
@@ -79,21 +79,26 @@ class Graph
 void Graph::dfsRec(vector<bool> &visit, int s, vector<int> &res)
 {
     visit[s] = true;
-    res.push_back(s);
+    cout << "[Inspecting - Station " << s << " (" << HUBNAMES[s] << ")]" << endl;
+
     for (const Pair &i : adjList[s]) {
-        if (!visit[i.first])
+        if (!visit[i.first]) {
+            cout << "  -> Station " << i.first << " (" << HUBNAMES[i.first] << ")";
+            cout << "[Distance: " << i.second << " km]" << endl;
             dfsRec(visit, i.first, res);
+        }
     }
 }
 
 //define dfs()
-vector<int> Graph::dfs(int start)
+void Graph::dfs(int start)
 {
-    if (start < 0 || start >= SIZE) return { };
+    if (start < 0 || start >= SIZE) return;
+    cout << "Track Inspection Crew Order (Starting from " << start << " [" << HUBNAMES[start] << "])" << endl;
+    cout << "(Purpose: )" << endl;
     vector<bool> visit(SIZE, false);
     vector<int> res;
     dfsRec(visit, start, res);
-    return res;
 }
 
 //define bfs()

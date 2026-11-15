@@ -89,42 +89,36 @@ void Graph::dfsRec(vector<bool> &visit, int s, vector<int> &res)
 //define dfs()
 vector<int> Graph::dfs(int start)
 {
+    if (start < 0 || start >= SIZE) return { };
     vector<bool> visit(SIZE, false);
     vector<int> res;
-    if (start < 0 || start >= SIZE)
-        return { };
-    else
-        dfsRec(visit, start, res);
+    dfsRec(visit, start, res);
     return res;
 }
 
 //define bfs()
 vector<int> Graph::bfs(int start)
 {
+    if (start < 0 || start >= SIZE) return { };
     vector<bool> visit(SIZE, false);
     vector<int> res;
     queue<int> q;
 
-    if (start < 0 || start >= SIZE)
-        return { };
-    else
+    visit[start] = true;
+    q.push(start);
+    //Loop through vertices
+    while (!q.empty())
     {
-        visit[start] = true;
-        q.push(start);
-        //Loop through vertices
-        while (!q.empty())
-        {
-            int cur = q.front();
-            q.pop();
-            res.push_back(cur);
+        int cur = q.front();
+        q.pop();
+        res.push_back(cur);
 
-            for (const Pair &i : adjList[cur])
+        for (const Pair &i : adjList[cur])
+        {
+            if (!visit[i.first])
             {
-                if (!visit[i.first])
-                {
-                    visit[i.first] = true;
-                    q.push(i.first);
-                }
+                visit[i.first] = true;
+                q.push(i.first);
             }
         }
     }

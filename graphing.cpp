@@ -79,7 +79,7 @@ class Graph
 void Graph::dfsRec(vector<bool> &visit, int s, vector<int> &res)
 {
     visit[s] = true;
-    cout << "[Inspecting - Station " << s << " (" << HUBNAMES[s] << ")]" << endl;
+    cout << "Inspecting - Station " << s << " (" << HUBNAMES[s] << ")" << endl;
 
     for (const Pair &i : adjList[s]) {
         if (!visit[i.first]) {

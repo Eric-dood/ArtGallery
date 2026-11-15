@@ -60,7 +60,7 @@ class Graph
             for (int i = 0; i < adjList.size(); i++)
             {
                 cout << "Station " << i << " (" << HUBNAMES[i] << ") connects to:" << endl;
-                for (Pair v : adjList[i])
+                for (Pair &v : adjList[i])
                 {
                     cout << "  -> Station " << v.first << " (" << HUBNAMES[v.first] << ")";
                     cout << " [Distance: " << v.second << " km]" << endl;
@@ -69,23 +69,23 @@ class Graph
             }
         }
         //Set up functions for DFS and BFS
-        void dfsRec(vector<bool> &visit, int s, vector<int> &r);
+        void dfsRec(vector<bool> &visit, int s);
         void dfs(int start);
-        vector<int> bfs(int start);
+        void bfs(int start);
 };
 
 //Now here's the functions for the DFS and BFS
 //Define dfsRec()
-void Graph::dfsRec(vector<bool> &visit, int s, vector<int> &res)
+void Graph::dfsRec(vector<bool> &visit, int s)
 {
     visit[s] = true;
     cout << "Inspecting - Station " << s << " (" << HUBNAMES[s] << ")" << endl;
 
     for (const Pair &i : adjList[s]) {
         if (!visit[i.first]) {
-            cout << "  -> Station " << i.first << " (" << HUBNAMES[i.first] << ")";
+            cout << "  -> Station " << i.first << " (" << HUBNAMES[i.first] << ") - ";
             cout << "[Distance: " << i.second << " km]" << endl;
-            dfsRec(visit, i.first, res);
+            dfsRec(visit, i.first);
         }
     }
 }
@@ -94,20 +94,22 @@ void Graph::dfsRec(vector<bool> &visit, int s, vector<int> &res)
 void Graph::dfs(int start)
 {
     if (start < 0 || start >= SIZE) return;
-    cout << "Track Inspection Crew Order (Starting from " << start << " [" << HUBNAMES[start] << "])" << endl;
-    cout << "(Purpose: )" << endl;
+    cout << "Track Inspection Crew Order (DFS) from Station " << start << " [" << HUBNAMES[start] << "]" << endl;
+    cout << "(Purpose: Follows rail lines to the end before backtracking)" << endl;
     vector<bool> visit(SIZE, false);
-    vector<int> res;
-    dfsRec(visit, start, res);
+    dfsRec(visit, start);
+    cout << endl;
 }
 
 //define bfs()
-vector<int> Graph::bfs(int start)
+void Graph::bfs(int start)
 {
-    if (start < 0 || start >= SIZE) return { };
+    if (start < 0 || start >= SIZE) return;
     vector<bool> visit(SIZE, false);
-    vector<int> res;
     queue<int> q;
+
+    cout << "Alert Propagation (BFS) from " << start << " [" << HUBNAMES[start] << "]" << endl;
+    cout << "(Purpose: Notifies neighboring stations at first, then expands to the other stations.)" << endl;
 
     visit[start] = true;
     q.push(start);
@@ -116,19 +118,19 @@ vector<int> Graph::bfs(int start)
     {
         int cur = q.front();
         q.pop();
-        res.push_back(cur);
+        cout << "Alerting - Station " << cur << " (" << HUBNAMES[cur] << ")" << endl;
 
         for (const Pair &i : adjList[cur])
         {
             if (!visit[i.first])
             {
                 visit[i.first] = true;
+                cout << "  -> Next station: " << i.first << " (" << HUBNAMES[i.first] << ") - ";
+                cout << "[Distance: " << i.second << "]" << endl;
                 q.push(i.first);
             }
         }
     }
-
-    return res;
 }
 
 //Start of main()

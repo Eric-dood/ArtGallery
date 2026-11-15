@@ -145,14 +145,9 @@ int main()
     graph.printGraph();
 
     //Print DFS results
-    vector<int> dfsRes = graph.dfs(0);
-    cout << endl << "DFS starting from vertex 0:" << endl;
-    for (int i : dfsRes) cout << i << " ";
-
+    graph.dfs(0);
     //Print BFS results
-    vector<int> bfsRes = graph.bfs(0);
-    cout << endl << "BFS starting from vertex 0:" << endl;
-    for (int j : bfsRes) cout << j << " ";
+    graph.bfs(0);
 
     return 0;
 }

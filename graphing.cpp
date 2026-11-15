@@ -16,8 +16,15 @@ typedef pair<int, int> Pair;
 //Create vector names
 const vector<string> HUBNAMES = 
 {
-    "",
-    ""
+    "Central Station Core",
+    "Southwest Gate",
+    "East Plaza",
+    "University District",
+    "Art Gallery",
+    "West Mall",
+    "Lakeside Park",
+    "Near Central Terminal",
+    "Northern Gymnasium"
 };
 
 class Graph
@@ -45,16 +52,17 @@ class Graph
         // Print the graph's adjacency list
         void printGraph()
         {
-            cout << "Network Topology:" << endl;
-            for (int i = 0; i < 20; i++) cout << "=";
+            for (int i = 0; i < 35; i++) cout << "=";
+            cout << endl << "Metro Transit Network Topology:" << endl;
+            for (int i = 0; i < 35; i++) cout << "=";
             cout << endl;
 
             for (int i = 0; i < adjList.size(); i++)
             {
-                cout << "Junction " << i << " (" << HUBNAMES[i] << ") connects to:" << endl;
+                cout << "Station " << i << " (" << HUBNAMES[i] << ") connects to:" << endl;
                 for (Pair v : adjList[i])
                 {
-                    cout << "-> Junction " << v.first << " (" << HUBNAMES[v.first] << ")";
+                    cout << "  -> Station " << v.first << " (" << HUBNAMES[v.first] << ")";
                     cout << " [Distance: " << v.second << " km]" << endl;
                 }
                 cout << endl;
@@ -83,7 +91,10 @@ vector<int> Graph::dfs(int start)
 {
     vector<bool> visit(SIZE, false);
     vector<int> res;
-    dfsRec(visit, start, res);
+    if (start < 0 || start >= SIZE)
+        return { };
+    else
+        dfsRec(visit, start, res);
     return res;
 }
 
@@ -94,21 +105,26 @@ vector<int> Graph::bfs(int start)
     vector<int> res;
     queue<int> q;
 
-    visit[start] = true;
-    q.push(start);
-    //Loop through vertices
-    while (!q.empty())
+    if (start < 0 || start >= SIZE)
+        return { };
+    else
     {
-        int cur = q.front();
-        q.pop();
-        res.push_back(cur);
-
-        for (const Pair &i : adjList[cur])
+        visit[start] = true;
+        q.push(start);
+        //Loop through vertices
+        while (!q.empty())
         {
-            if (!visit[i.first])
+            int cur = q.front();
+            q.pop();
+            res.push_back(cur);
+
+            for (const Pair &i : adjList[cur])
             {
-                visit[i.first] = true;
-                q.push(i.first);
+                if (!visit[i.first])
+                {
+                    visit[i.first] = true;
+                    q.push(i.first);
+                }
             }
         }
     }
@@ -122,10 +138,10 @@ int main()
     // Creates a vector of graph edges/weights
     vector<Edge> edges = {
     // (x, y, w) —> edge from x to y having weight w
-    {0,1,12},{0,3,21},{2,3,6},
+    {0,1,12},{3,0,4},{2,3,6},
     {5,6,6},{4,5,9},{2,4,4},
-    {2,5,5},{0,8,5},{0,4,2},{2,7,15},
-    {1,2,12},{3,6,1},{3,0,4},
+    {2,5,5},{0,8,5},{0,4,2},
+    {2,7,15},{1,2,12},{3,6,1}
     };
 
     // Creates graph

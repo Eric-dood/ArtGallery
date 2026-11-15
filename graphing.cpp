@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <string>
 using namespace std;
 //Global constants
 const int SIZE = 9;
@@ -12,6 +13,12 @@ struct Edge
 };
 //Create alias 'Pair' for the pair<int,int> data
 typedef pair<int, int> Pair;
+//Create vector names
+const vector<string> HUBNAMES = 
+{
+    "City Hall Core",
+    ""
+};
 
 class Graph
 {
@@ -38,76 +45,70 @@ class Graph
         // Print the graph's adjacency list
         void printGraph()
         {
-            cout << "Graph's adjacency list:" << endl;
+            cout << "Network Topology:" << endl;
+            for (int i = 0; i < 20; i++) cout << "=";
+            cout << endl;
+
             for (int i = 0; i < adjList.size(); i++)
             {
-                cout << i << " --> ";
+                cout << "Junction " << i << " (" << HUBNAMES[i] << ") connects to:" << endl;
                 for (Pair v : adjList[i])
-                cout << "(" << v.first << ", " << v.second << ") ";
+                {
+                    cout << "-> Junction " << v.first << " (" << HUBNAMES[v.first] << ")";
+                    cout << " [Distance: " << v.second << " km]" << endl;
+                }
                 cout << endl;
             }
         }
         //Set up functions for DFS and BFS
-        void dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &r);
-        vector<int> dfs(vector<vector<Pair>> &a);
-        vector<int> bfs(vector<vector<Pair>> &a);
+        void dfsRec(vector<bool> &visit, int s, vector<int> &r);
+        vector<int> dfs(int start);
+        vector<int> bfs(int start);
 };
 
 //Now here's the functions for the DFS and BFS
 //Define dfsRec()
-void Graph::dfsRec(vector<vector<Pair>> &a, vector<bool> &visit, int s, vector<int> &res)
+void Graph::dfsRec(vector<bool> &visit, int s, vector<int> &res)
 {
     visit[s] = true;
     res.push_back(s);
-    for (Pair &i : a[s]) {
+    for (const Pair &i : adjList[s]) {
         if (!visit[i.first])
-            dfsRec(a, visit, i.first, res);
+            dfsRec(visit, i.first, res);
     }
 }
 
 //define dfs()
-vector<int> Graph::dfs(vector<vector<Pair>> &a)
+vector<int> Graph::dfs(int start)
 {
-    vector<bool> visit(a.size(), false);
+    vector<bool> visit(SIZE, false);
     vector<int> res;
-    for (int i = 0; i < a.size(); i++) {
-        if (!visit[i])
-            dfsRec(a, visit, i, res);
-    }
+    dfsRec(visit, start, res);
     return res;
 }
 
 //define bfs()
-vector<int> Graph::bfs(vector<vector<Pair>> &a)
+vector<int> Graph::bfs(int start)
 {
-    int size = a.size();
-    vector<bool> visit(a.size(), false);
+    vector<bool> visit(SIZE, false);
     vector<int> res;
     queue<int> q;
 
+    visit[start] = true;
+    q.push(start);
     //Loop through vertices
-    for (int i = 0; i < size; i++)
+    while (!q.empty())
     {
-        if (!visit[i])
+        int cur = q.front();
+        q.pop();
+        res.push_back(cur);
+
+        for (const Pair &i : adjList[cur])
         {
-            visit[i] = true;
-            q.push(i);
-        }
-        //Check if the queue is not empty
-        while (!q.empty())
-        {
-            int cur = q.front();
-            q.pop();
-            res.push_back(cur);
-            //Visit all vertices
-            for (Pair n : a[cur])
+            if (!visit[i.first])
             {
-                int fir = n.first;
-                if (!visit[fir])
-                {
-                    visit[fir] = true;
-                    q.push(fir);
-                }
+                visit[i.first] = true;
+                q.push(i.first);
             }
         }
     }
@@ -134,12 +135,12 @@ int main()
     graph.printGraph();
 
     //Print DFS results
-    vector<int> dfsRes = graph.dfs(graph.adjList);
+    vector<int> dfsRes = graph.dfs(0);
     cout << endl << "DFS starting from vertex 0:" << endl;
     for (int i : dfsRes) cout << i << " ";
 
     //Print BFS results
-    vector<int> bfsRes = graph.bfs(graph.adjList);
+    vector<int> bfsRes = graph.bfs(0);
     cout << endl << "BFS starting from vertex 0:" << endl;
     for (int j : bfsRes) cout << j << " ";
 

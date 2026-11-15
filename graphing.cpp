@@ -16,7 +16,7 @@ typedef pair<int, int> Pair;
 //Create vector names
 const vector<string> HUBNAMES = 
 {
-    "City Hall Core",
+    "",
     ""
 };
 

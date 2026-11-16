@@ -7,6 +7,9 @@
 using namespace std;
 //Global constants
 const int SIZE = 9;
+//Function prototype
+void printBorder();
+void borderedMessage(string msg);
 //Define the Edge struct
 struct Edge {
     int src, dest, weight;
@@ -52,9 +55,7 @@ class Graph
         // Print the graph's adjacency list
         void printGraph()
         {
-            for (int i = 0; i < 35; i++) cout << "=";
-            cout << endl << "Metro Transit Network Topology:" << endl;
-            for (int i = 0; i < 35; i++) cout << "=";
+            borderedMessage("Metro Transit Network Topology:");
             cout << endl;
 
             for (int i = 0; i < adjList.size(); i++)
@@ -95,9 +96,16 @@ void Graph::dfsRec(vector<bool> &visit, int s)
 //define dfs()
 void Graph::dfs(int start)
 {
-    if (start < 0 || start >= SIZE) return;
+    if (start < 0 || start >= SIZE)
+    {
+        cout << "ERROR: Station is out of bounds or does not exist." << endl;
+        return;
+    }
+    
+    printBorder();
     cout << "Track Inspection Crew Order (DFS) from Station " << start << " [" << HUBNAMES[start] << "]" << endl;
     cout << "(Purpose: Follows rail lines to the end before backtracking)" << endl;
+    printBorder();
     vector<bool> visit(SIZE, false);
     dfsRec(visit, start);
     cout << endl;
@@ -106,12 +114,19 @@ void Graph::dfs(int start)
 //define bfs()
 void Graph::bfs(int start)
 {
-    if (start < 0 || start >= SIZE) return;
+    if (start < 0 || start >= SIZE)
+    {
+        cout << "ERROR: Station is out of bounds or does not exist." << endl;
+        return;
+    }
+
     vector<bool> visit(SIZE, false);
     queue<int> q;
 
+    printBorder();
     cout << "Alert Propagation (BFS) from " << start << " [" << HUBNAMES[start] << "]" << endl;
     cout << "(Purpose: Notifies neighboring stations at first, then expands to the other stations.)" << endl;
+    printBorder();
 
     visit[start] = true;
     q.push(start);
@@ -138,7 +153,11 @@ void Graph::bfs(int start)
 //Define shortestPath()
 void Graph::shortPath(int start)
 {
-    if (start < 0 || start >= SIZE) return;
+    if (start < 0 || start >= SIZE)
+    {
+        cout << "ERROR: Station is out of bounds or does not exist." << endl;
+        return;
+    }
 
     vector<int> dis(SIZE, INT_MAX);
     vector<int> par(SIZE, -1);
@@ -146,6 +165,8 @@ void Graph::shortPath(int start)
 
     dis[start] = 0;
     pq.push({0, start});
+
+    borderedMessage("Calculating the shortest Station paths...");
 
     while (!pq.empty())
     {
@@ -164,7 +185,6 @@ void Graph::shortPath(int start)
                 pq.push({dis[vertex], vertex});
             }
         }
-    
     }
     cout << "Shortest path from Station " << start << ":" << endl;
     for (int i = 0; i < SIZE; i++)
@@ -174,7 +194,11 @@ void Graph::shortPath(int start)
 //define minSpanTree()
 void Graph::minSpanTree(int start)
 {
-    if (start < 0 || start >= SIZE) return;
+    if (start < 0 || start >= SIZE)
+    {
+        cout << "ERROR: Station is out of bounds or does not exist." << endl;
+        return;
+    }
 
     vector<int> key(SIZE, INT_MAX), par(SIZE, -1), order;
     vector<bool> inMST(SIZE, false);
@@ -182,6 +206,8 @@ void Graph::minSpanTree(int start)
 
     key[start] = 0;
     pq.push({0, start});
+
+    borderedMessage("Finding the Minimum Spanning Tree...");
 
     while(!pq.empty())
     {
@@ -229,8 +255,8 @@ int main()
     // Creates graph
     Graph graph(edges);
 
-    //Define the choice, which will be used for validation looping and 
-    int choice = -1;
+    //Define the choice, which will be used for validation looping and selections
+    int choice = -1, input = 0;
 
     //Print the menu
     cout << "Welcome to the Metro Transit Network program! Feel free to enter any of the options below:" << endl;
@@ -247,25 +273,43 @@ int main()
         //Make the user pick each option
         cin >> choice;
         cin.ignore(1000, 10);
+        if (choice >= 2)
+        {
+            cout << "Select a Station: ";
+            cin >> input;
+            cin.ignore(1000, 10);
+        }
         switch (choice)
         {
             case 1: //Prints adjacency list representation of graph
                 graph.printGraph();
                 break;
             case 2: //Print DFS results
-                graph.dfs(0);
+                graph.dfs(input);
                 break;
             case 3: //Print BFS results
-                graph.bfs(0);
+                graph.bfs(input);
                 break;
             case 4: //Print the shortest path
-                graph.shortPath(0);
+                graph.shortPath(input);
                 break;
             case 5: //Print the minimum spanning tree
-                graph.minSpanTree(0);
+                graph.minSpanTree(input);
                 break;
         }
     }
 
     return 0;
+}
+
+void printBorder() {
+    for (int i = 0; i < 35; i++) cout << "=";
+    cout << endl;
+}
+
+void borderedMessage(string msg)
+{
+    printBorder();
+    cout << msg << endl;
+    printBorder();
 }

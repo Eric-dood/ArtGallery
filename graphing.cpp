@@ -16,7 +16,7 @@ struct Edge {
 };
 //Create alias 'Pair' for the pair<int,int> data
 typedef pair<int, int> Pair;
-//Create vector names
+//Create vector names for the hubs/locations
 const vector<string> HUBNAMES = 
 {
     "Central Train Station",
@@ -30,6 +30,7 @@ const vector<string> HUBNAMES =
     "Northern Gymnasium"
 };
 
+//Define the Graph class
 class Graph
 {
     public:
@@ -58,14 +59,18 @@ class Graph
             borderedMessage("Metro Transit Network Topology:");
             cout << endl;
 
+            //Use a for loop to traverse through the list
             for (int i = 0; i < adjList.size(); i++)
             {
+                //Print a station
                 cout << "Station " << i << " (" << HUBNAMES[i] << ") connects to:" << endl;
+                //Go through the entire list to print each pair
                 for (Pair &v : adjList[i])
                 {
                     cout << "  -> Station " << v.first << " (" << HUBNAMES[v.first] << ")";
                     cout << " [Distance: " << v.second << " km]" << endl;
                 }
+                //Leave extra space
                 cout << endl;
             }
         }
@@ -101,7 +106,7 @@ void Graph::dfs(int start)
         cout << "ERROR: Station is out of bounds or does not exist." << endl;
         return;
     }
-    
+
     printBorder();
     cout << "Track Inspection Crew Order (DFS) from Station " << start << " [" << HUBNAMES[start] << "]" << endl;
     cout << "(Purpose: Follows rail lines to the end before backtracking)" << endl;
@@ -299,17 +304,25 @@ int main()
         }
     }
 
+    //Print a thank you message
+    cout << "Thank you for checking out my program!" << endl;
+
     return 0;
 }
 
+//Define printBorder()
 void printBorder() {
+    //Use a range-based loop to print the bar
     for (int i = 0; i < 35; i++) cout << "=";
+    //Leave extra space
     cout << endl;
 }
 
+//Define borderedMessage()
 void borderedMessage(string msg)
 {
     printBorder();
+    //Print the message
     cout << msg << endl;
     printBorder();
 }

@@ -157,28 +157,62 @@ void Graph::shortPath(int start)
 
         for (const Pair &i : adjList[u])
         {
-            if (dis[u] + i.second < dis[i.first])
+            int vertex = i.first;
+            if (dis[u] + i.second < dis[vertex])
             {
-                int vertex = i.first;
                 dis[vertex] = dis[u] + i.second;
                 par[vertex] = u;
                 pq.push({dis[vertex], vertex});
             }
         }
+    
+    }
     cout << "Shortest path from Station " << start << ":" << endl;
     for (int i = 0; i < SIZE; i++)
         cout << start << "  -> " << i << ": " << dis[i] << endl;
-    }
 }
 
 //define minSpanTree()
-void minSpanTree(int start)
+void Graph::minSpanTree(int start)
 {
     if (start < 0 || start >= SIZE) return;
 
     vector<int> key(SIZE, INT_MAX), par(SIZE, -1), order;
     vector<bool> inMST(SIZE, false);
     priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
+
+    key[start] = 0;
+    pq.push({0, start});
+
+    while(!pq.empty())
+    {
+        int u = pq.top().second;
+        pq.pop();
+
+        if (inMST[u]) continue;
+        inMST[u] = true;
+
+        if (par[u] != -1)
+            order.push_back(u);
+
+        for (const Pair &i : adjList[u])
+        {
+            int v = i.first;
+            if (!inMST[v] && i.second < key[v])
+            {
+                key[v] = i.second;
+                par[v] = u;
+                pq.push({key[v], v});
+            }
+        }
+    }
+
+    cout << "Minimum Spanning Tree edges:" << endl;
+    for (int i : order) {
+        cout << "Edge from Station " << i << " (" << HUBNAMES[i] << ") to Station ";
+        cout << par[i] << " (" << HUBNAMES[par[i]] << "):" << endl;
+        cout << "  -> Capacity: " << key[i] << " km." << endl;
+    }
 }
 
 //Start of main()
@@ -203,8 +237,10 @@ int main()
     graph.dfs(0);
     //Print BFS results
     graph.bfs(0);
-    //Print shortest path
+    //Print the shortest path
     graph.shortPath(0);
+    //Print the minimum spanning tree
+    graph.minSpanTree(0);
 
     return 0;
 }

@@ -86,9 +86,11 @@ class Graph
 //Define dfsRec()
 void Graph::dfsRec(vector<bool> &visit, int s)
 {
+    //Always set the starting element to true
     visit[s] = true;
+    //Print the station name & number
     cout << "Inspecting - Station " << s << " (" << HUBNAMES[s] << ")" << endl;
-
+    //Use a station name to 
     for (const Pair &i : adjList[s]) {
         if (!visit[i.first]) {
             cout << "  -> Station " << i.first << " (" << HUBNAMES[i.first] << ") - ";
@@ -101,6 +103,7 @@ void Graph::dfsRec(vector<bool> &visit, int s)
 //define dfs()
 void Graph::dfs(int start)
 {
+    //Validation check for error prevention
     if (start < 0 || start >= SIZE)
     {
         cout << "ERROR: Station is out of bounds or does not exist." << endl;
@@ -119,6 +122,7 @@ void Graph::dfs(int start)
 //define bfs()
 void Graph::bfs(int start)
 {
+    //Validation check for error prevention
     if (start < 0 || start >= SIZE)
     {
         cout << "ERROR: Station is out of bounds or does not exist." << endl;
@@ -158,6 +162,7 @@ void Graph::bfs(int start)
 //Define shortestPath()
 void Graph::shortPath(int start)
 {
+    //Validation check for error prevention
     if (start < 0 || start >= SIZE)
     {
         cout << "ERROR: Station is out of bounds or does not exist." << endl;
@@ -199,6 +204,7 @@ void Graph::shortPath(int start)
 //define minSpanTree()
 void Graph::minSpanTree(int start)
 {
+    //Validation check for error prevention
     if (start < 0 || start >= SIZE)
     {
         cout << "ERROR: Station is out of bounds or does not exist." << endl;
@@ -238,6 +244,7 @@ void Graph::minSpanTree(int start)
     }
 
     cout << "Minimum Spanning Tree edges:" << endl;
+    //Print the edges' minimum spanning tree
     for (int i : order) {
         cout << "Edge from Station " << i << " (" << HUBNAMES[i] << ") to Station ";
         cout << par[i] << " (" << HUBNAMES[par[i]] << "):" << endl;
@@ -278,12 +285,14 @@ int main()
         //Make the user pick each option
         cin >> choice;
         cin.ignore(1000, 10);
+        //If the choice is higher than 2, prit
         if (choice >= 2)
         {
             cout << "Select a Station: ";
             cin >> input;
             cin.ignore(1000, 10);
         }
+        //Use switch statements to call the respective function based on choice
         switch (choice)
         {
             case 1: //Prints adjacency list representation of graph

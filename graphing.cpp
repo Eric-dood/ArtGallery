@@ -74,6 +74,7 @@ class Graph
         void dfs(int start);
         void bfs(int start);
         void shortPath(int start);
+        void minSpanTree(int start);
 };
 
 //Now here's the functions for the DFS and BFS
@@ -168,6 +169,16 @@ void Graph::shortPath(int start)
     for (int i = 0; i < SIZE; i++)
         cout << start << "  -> " << i << ": " << dis[i] << endl;
     }
+}
+
+//define minSpanTree()
+void minSpanTree(int start)
+{
+    if (start < 0 || start >= SIZE) return;
+
+    vector<int> key(SIZE, INT_MAX), par(SIZE, -1), order;
+    vector<bool> inMST(SIZE, false);
+    priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
 }
 
 //Start of main()

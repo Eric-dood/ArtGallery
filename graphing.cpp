@@ -3,6 +3,7 @@
 #include <vector>
 #include <queue>
 #include <string>
+#include <climits>
 using namespace std;
 //Global constants
 const int SIZE = 9;
@@ -72,7 +73,7 @@ class Graph
         void dfsRec(vector<bool> &visit, int s);
         void dfs(int start);
         void bfs(int start);
-        void shortPath(int start, int end);
+        void shortPath(int start);
 };
 
 //Now here's the functions for the DFS and BFS
@@ -135,14 +136,38 @@ void Graph::bfs(int start)
 }
 
 //Define shortestPath()
-void Graph::shortPath(int start, int end)
+void Graph::shortPath(int start)
 {
-    if (start < 0 || end < 0 || start > SIZE || end > SIZE) return;
+    if (start < 0 || start >= SIZE) return;
 
-    vector<int> dis<SIZE, INF>;
-    vector<int> par<SIZE, -1>;
-    priority_queue<Pair, vector<Pair>, greater<Pair>> p;
+    vector<int> dis(SIZE, INT_MAX);
+    vector<int> par(SIZE, -1);
+    priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
 
+    dis[start] = 0;
+    pq.push({0, start});
+
+    while (!pq.empty())
+    {
+        int u = pq.top().second, d = pq.top().first;
+        pq.pop();
+
+        if (d > dis[u]) continue;
+
+        for (const Pair &i : adjList[u])
+        {
+            if (dis[u] + i.second < dis[i.first])
+            {
+                int vertex = i.first;
+                dis[vertex] = dis[u] + i.second;
+                par[vertex] = u;
+                pq.push({dis[vertex], vertex});
+            }
+        }
+    cout << "Shortest path from Station " << start << ":" << endl;
+    for (int i = 0; i < SIZE; i++)
+        cout << start << "  -> " << i << ": " << dis[i] << endl;
+    }
 }
 
 //Start of main()
@@ -167,6 +192,8 @@ int main()
     graph.dfs(0);
     //Print BFS results
     graph.bfs(0);
+    //Print shortest path
+    graph.shortPath(0);
 
     return 0;
 }

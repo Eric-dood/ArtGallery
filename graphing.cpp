@@ -72,6 +72,7 @@ class Graph
         void dfsRec(vector<bool> &visit, int s);
         void dfs(int start);
         void bfs(int start);
+        void shortPath(int start, int end);
 };
 
 //Now here's the functions for the DFS and BFS
@@ -131,6 +132,17 @@ void Graph::bfs(int start)
             }
         }
     }
+}
+
+//Define shortestPath()
+void Graph::shortPath(int start, int end)
+{
+    if (start < 0 || end < 0 || start > SIZE || end > SIZE) return;
+
+    vector<int> dis<SIZE, INF>;
+    vector<int> par<SIZE, -1>;
+    priority_queue<Pair, vector<Pair>, greater<Pair>> p;
+
 }
 
 //Start of main()

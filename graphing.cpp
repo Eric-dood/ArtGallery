@@ -8,8 +8,7 @@ using namespace std;
 //Global constants
 const int SIZE = 9;
 //Define the Edge struct
-struct Edge
-{
+struct Edge {
     int src, dest, weight;
 };
 //Create alias 'Pair' for the pair<int,int> data
@@ -17,7 +16,7 @@ typedef pair<int, int> Pair;
 //Create vector names
 const vector<string> HUBNAMES = 
 {
-    "Central Station Core",
+    "Central Train Station",
     "Southwest Gate",
     "East Plaza",
     "University District",
@@ -230,17 +229,43 @@ int main()
     // Creates graph
     Graph graph(edges);
 
-    // Prints adjacency list representation of graph
-    graph.printGraph();
+    //Define the choice, which will be used for validation looping and 
+    int choice = -1;
 
-    //Print DFS results
-    graph.dfs(0);
-    //Print BFS results
-    graph.bfs(0);
-    //Print the shortest path
-    graph.shortPath(0);
-    //Print the minimum spanning tree
-    graph.minSpanTree(0);
+    //Print the menu
+    cout << "Welcome to the Metro Transit Network program! Feel free to enter any of the options below:" << endl;
+    while (choice != 0)
+    {
+        cout << endl << "Menu:" << endl;
+        cout << "[1] Display the transit newtork" << endl;
+        cout << "[2] Track Inspection Crew Order (DFS)" << endl;
+        cout << "[3] Set up the Alert Propagation (BFS)" << endl;
+        cout << "[4] Calculate the shortest paths" << endl;
+        cout << "[5] Find the Minimum Spanning Tree" << endl;
+        cout << "[0] Exit the program" << endl;
+        cout << "Choice --> ";
+        //Make the user pick each option
+        cin >> choice;
+        cin.ignore(1000, 10);
+        switch (choice)
+        {
+            case 1: //Prints adjacency list representation of graph
+                graph.printGraph();
+                break;
+            case 2: //Print DFS results
+                graph.dfs(0);
+                break;
+            case 3: //Print BFS results
+                graph.bfs(0);
+                break;
+            case 4: //Print the shortest path
+                graph.shortPath(0);
+                break;
+            case 5: //Print the minimum spanning tree
+                graph.minSpanTree(0);
+                break;
+        }
+    }
 
     return 0;
 }
